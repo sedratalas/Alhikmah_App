@@ -1,0 +1,80 @@
+import 'package:alhekmah_app/model/hadith_model.dart';
+import 'package:alhekmah_app/screen/hadeth_recitation/bloc/hadith_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/utils/asset_manager.dart';
+import '../../core/utils/color_manager.dart';
+import '../hadeth_recitation/bloc/hadith_bloc.dart';
+import '../hadeth_recitation/hadeth_recitation_screen.dart';
+
+class AhadithScreen extends StatelessWidget {
+   AhadithScreen({super.key});
+  late double screenWidth;
+  late double screenHeight;
+  @override
+  Widget build(BuildContext context) {
+    screenWidth =MediaQuery.sizeOf(context).width;
+    screenHeight = MediaQuery.sizeOf(context).height;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryBlue,
+        title: Align(
+          alignment: Alignment.centerRight,
+          child: Text("الأربعون النووية",
+          ),
+        ),
+        titleTextStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            fontFamily: "Cairo"
+        ),
+        actions: [
+          Padding(
+            padding:  EdgeInsets.only(right: screenWidth*(30/390)),
+            child: Image.asset(AssetManager.profile),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding:  EdgeInsets.only(top: screenHeight*(48/840),),
+        child: ListView.builder(
+            itemCount: ahadithList.length,
+            itemBuilder: (context,index){
+              return Padding(
+                padding:  EdgeInsets.only(left: screenWidth*(10/390), right: screenWidth*(10/390),bottom: screenHeight*(14/840)),
+                child: GestureDetector(
+                  onTap: (){
+                    context.read<HadithBloc>().add(FetchHadithByIdEvent(index));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HadethRecitationScreen(),
+                    ));
+
+                  },
+                  child: Container(
+                    width: screenWidth*(370/390),
+                    height: screenHeight*(59/844),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColors.primaryBlue,
+                      ),
+                      color: AppColors.babyBlue,
+                    ),
+                    child: Center(
+                      child: Text(ahadithList[index].title,style: TextStyle(
+                        color: AppColors.primaryBlue,
+                        fontFamily: "Cairo",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+        ),
+      ),
+    );
+  }
+}
