@@ -1,3 +1,6 @@
+// هذا الملف يقوم بإدارة جميع إعدادات مشروع Gradle.
+// يتم استخدامه لتضمين المشاريع الفرعية وإدارة المستودعات (repositories) وتوزيع Gradle Plugin.
+
 pluginManagement {
     def flutterSdkPath = {
         def properties = new Properties()
@@ -7,19 +10,26 @@ pluginManagement {
         return flutterSdkPath
     }()
 
+    // يُستخدم لتضمين إعدادات بناء Flutter
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
+        // مستودع جوجل الرسمي
         google()
+        // مستودع Maven المركزي
         mavenCentral()
+        // بوابة Gradle Plugin
         gradlePluginPortal()
     }
 }
 
+// هنا يتم تعريف إصدارات الـ plugins، وقد قمنا بتحديثها
 plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    id "com.android.application" version "8.1.0" apply false
+    // قمنا بتحديث إصدار 'com.android.application' إلى 8.2.1 لحل مشكلة عدم التوافق
+    id "com.android.application" version "8.2.1" apply false
     id "org.jetbrains.kotlin.android" version "1.8.22" apply false
 }
 
+// يتضمن المشروع الفرعي للتطبيق
 include ":app"

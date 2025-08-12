@@ -52,7 +52,6 @@ class HadithBloc extends Bloc<HadithEvent, HadithState>{
       }
     });
 
-
   }
 
 }

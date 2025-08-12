@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/utils/asset_manager.dart';
 import '../../core/utils/color_manager.dart';
+//import '../hadeth_recitation/backup_design.dart';
 import '../hadeth_recitation/bloc/hadith_bloc.dart';
-import '../hadeth_recitation/hadeth_recitation_screen.dart';
+//import '../hadeth_recitation/hadeth_recitation_screen.dart';
+//import '../hadeth_recitation/hadith_recitation.dart';
+import '../hadeth_recitation/recitation_and_listen.dart';
 
 class AhadithScreen extends StatelessWidget {
    AhadithScreen({super.key});
