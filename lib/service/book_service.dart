@@ -1,6 +1,8 @@
-import 'package:alhekmah_app/model/remote_book.dart';
-import 'package:alhekmah_app/model/remote_hadith.dart';
+
+import 'package:alhekmah_app/model/standard_hadith_model.dart';
 import 'package:dio/dio.dart';
+
+import '../model/standard_remote_book.dart';
 
 class BookService{
   Dio dio = Dio();
@@ -25,17 +27,16 @@ class BookService{
       }
       return books;
     }catch(e){
-      print(e);
-      return [];
+      throw Exception("فشل جلب الكتب من السيرفر: $e");
     }
 }
 
-Future<List<RemotHadith>?>getBookHadiths(String bookId)async{
+Future<List<Hadith>?>getBookHadiths(String bookId)async{
     try{
       response = await dio.get(bookId+"/hadiths");
-      List<RemotHadith> hadiths = [];
+      List<Hadith> hadiths = [];
       for(int i=0; i< response.data.length ;i++){
-        hadiths.add(RemotHadith.fromJson(response.data[i]));
+        hadiths.add(Hadith.fromJson(response.data[i]));
       }
       return hadiths;
     }catch(e){

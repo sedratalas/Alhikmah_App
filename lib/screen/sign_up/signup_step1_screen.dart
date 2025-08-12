@@ -1,7 +1,10 @@
 import 'package:alhekmah_app/core/utils/asset_manager.dart';
 import 'package:alhekmah_app/core/utils/color_manager.dart';
+import 'package:alhekmah_app/screen/sign_up/signup_step2_screen.dart';
 import 'package:alhekmah_app/screen/sign_up/widget/custum_buttom.dart';
 import 'package:flutter/material.dart';
+
+import 'signup_step3_screen.dart';
 
 class SignupStep1Screen extends StatelessWidget {
    SignupStep1Screen({super.key});
@@ -36,6 +39,12 @@ class SignupStep1Screen extends StatelessWidget {
               Padding(
                 padding:  EdgeInsets.only(left: screenWidth*(19/390),right: screenWidth*(19/390), bottom: screenHeight*(27/840),),
                 child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=> SignupStep2Screen())
+                    );
+                  },
                   child: CustomButton(
                     text: Text("إنشاء حساب", style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.w600,fontFamily: "Cairo"),),
                   ),

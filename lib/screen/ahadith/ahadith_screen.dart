@@ -1,4 +1,5 @@
-import 'package:alhekmah_app/model/hadith_model.dart';
+
+import 'package:alhekmah_app/model/standard_remote_book.dart';
 import 'package:alhekmah_app/screen/hadeth_recitation/bloc/hadith_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,8 @@ import '../hadeth_recitation/bloc/hadith_bloc.dart';
 import '../hadeth_recitation/recitation_and_listen.dart';
 
 class AhadithScreen extends StatelessWidget {
-   AhadithScreen({super.key});
+   AhadithScreen({super.key, required this.book});
+   final RemotBook book;
   late double screenWidth;
   late double screenHeight;
   @override
@@ -41,16 +43,22 @@ class AhadithScreen extends StatelessWidget {
       body: Padding(
         padding:  EdgeInsets.only(top: screenHeight*(48/840),),
         child: ListView.builder(
-            itemCount: ahadithList.length,
+            itemCount: book.hadiths.length,
             itemBuilder: (context,index){
               return Padding(
                 padding:  EdgeInsets.only(left: screenWidth*(10/390), right: screenWidth*(10/390),bottom: screenHeight*(14/840)),
                 child: GestureDetector(
                   onTap: (){
-                    context.read<HadithBloc>().add(FetchHadithByIdEvent(index));
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HadethRecitationScreen(),
-                    ));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => HadithBloc(
+                              book: book,
+                              initialIndex: index,
+                            )..add(FetchHadithByIdEvent(index)),
+                            child: HadethRecitationScreen(),
+                          ),
+                        ));
 
                   },
                   child: Container(
@@ -64,7 +72,7 @@ class AhadithScreen extends StatelessWidget {
                       color: AppColors.babyBlue,
                     ),
                     child: Center(
-                      child: Text(ahadithList[index].title,style: TextStyle(
+                      child: Text(book.hadiths[index].title,style: TextStyle(
                         color: AppColors.primaryBlue,
                         fontFamily: "Cairo",
                         fontSize: 16,

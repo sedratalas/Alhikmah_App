@@ -1,4 +1,4 @@
-import 'package:alhekmah_app/model/hadith_model.dart';
+import 'package:alhekmah_app/model/standard_hadith_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class HadithState extends Equatable {
@@ -8,28 +8,23 @@ abstract class HadithState extends Equatable {
   List<Object> get props => [];
 }
 
-class HadithInitialState extends HadithState{
-  final int currentHadithIndex;
-  const HadithInitialState(this.currentHadithIndex);
-
-  @override
-  List<Object> get props => [currentHadithIndex];
-}
+class HadithInitialState extends HadithState {}
 
 class HadithLoadingState extends HadithState {}
 
 class HadithLoadedState extends HadithState {
   final Hadith currentHadith;
   final int currentHadithIndex;
+  final int totalHadiths;
 
   const HadithLoadedState({
     required this.currentHadith,
     required this.currentHadithIndex,
+    required this.totalHadiths,
   });
 
   @override
-  List<Object> get props => [currentHadith, currentHadithIndex];
-
+  List<Object> get props => [currentHadith, currentHadithIndex, totalHadiths];
 }
 
 class HadithErrorState extends HadithState {
@@ -39,4 +34,3 @@ class HadithErrorState extends HadithState {
   @override
   List<Object> get props => [message];
 }
-

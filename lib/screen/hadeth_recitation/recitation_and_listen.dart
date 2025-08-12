@@ -392,7 +392,8 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
           final currentHadith = state.currentHadith;
           final currentIndex = state.currentHadithIndex;
           final hadithBloc = context.read<HadithBloc>();
-          final ahadithListLength = hadithBloc.ahadithList.length;
+          final String hadithSanadOrRaawi = currentHadith.sanad ?? currentHadith.raawi ?? "لا يوجد سند";
+          final String hadithMatnOrContent = currentHadith.matn ?? currentHadith.content ?? "لا يوجد متن";
 
           return Scaffold(
             backgroundColor: AppColors.lightBackground,
@@ -495,7 +496,7 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
                             ],
                           ),
                           child: Text(
-                            state.currentHadith.sanad,
+                          hadithSanadOrRaawi,
                             style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 18,
@@ -588,7 +589,7 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
                               ],
                             )
                                 : Text(
-                              state.currentHadith.matn,
+                              hadithMatnOrContent,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 18,
@@ -666,7 +667,7 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
                         icon: GestureDetector(
                           onTap: _isListening ? null : () {
                             if (_isRecording) {
-                              _stopRecording(currentHadith.matn);
+                              _stopRecording(hadithMatnOrContent);
                             } else {
                               _startRecording();
                             }
@@ -677,7 +678,7 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
                       ),
                       BottomNavigationBarItem(
                         icon: GestureDetector(
-                            onTap: currentIndex < ahadithListLength - 1
+                            onTap: currentIndex < state.totalHadiths - 1
                                 ? () {
                               setState(() {
                                 _transcription = null;

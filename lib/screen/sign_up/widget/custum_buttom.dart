@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   CustomButton(
       {Key? key,
-        this.text,
+        required this.text,
         this.width,
         this.height,
       }) : super(key: key,);
   late double? width;
   double? height;
-  Text? text;
+  Widget text;
   late double ScreenWidth;
   late double ScreenHeight;
   @override
