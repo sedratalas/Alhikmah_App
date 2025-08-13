@@ -1,5 +1,7 @@
 import 'package:alhekmah_app/core/utils/asset_manager.dart';
 import 'package:alhekmah_app/core/utils/color_manager.dart';
+import 'package:alhekmah_app/screen/all_books/all_books_screen.dart';
+import 'package:alhekmah_app/screen/login/login_screen.dart';
 import 'package:alhekmah_app/screen/sign_up/signup_step2_screen.dart';
 import 'package:alhekmah_app/screen/sign_up/widget/custum_buttom.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +57,11 @@ class SignupStep1Screen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("تسجيل دخول",style: TextStyle(fontFamily: "Cairo", fontSize: 17, fontWeight: FontWeight.w400, color: AppColors.red,decoration: TextDecoration.underline,decorationColor: AppColors.red,),),
+                    GestureDetector(
+                      onTap:(){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+                       },
+                       child: Text("تسجيل دخول",style: TextStyle(fontFamily: "Cairo", fontSize: 17, fontWeight: FontWeight.w400, color: AppColors.red,decoration: TextDecoration.underline,decorationColor: AppColors.red,),)),
                     SizedBox(width: screenWidth*(21/390)),
                     Text("لديك حساب بالفعل؟ ", style: TextStyle(fontFamily: "Cairo", fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.primaryBlue),),
 
@@ -82,6 +88,10 @@ class SignupStep1Screen extends StatelessWidget {
               Padding(
                 padding:  EdgeInsets.only(left: screenWidth*(19/390),right: screenWidth*(19/390), bottom: screenHeight*(27/840)),
                 child: GestureDetector(
+                  onTap: (){
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AllBooksScreen()));
+                  },
                   child: Container(
                     width: screenWidth*(312/375),
                     height: screenHeight*(54/812),

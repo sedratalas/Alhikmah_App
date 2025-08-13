@@ -107,6 +107,7 @@ class _AllBooksScreenState extends State<AllBooksScreen> {
                             child: Text(
                               book.title,
                               maxLines: 2,
+                              textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: AppColors.primaryBlue,
                                 fontFamily: "Cairo",

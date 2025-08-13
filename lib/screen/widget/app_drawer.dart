@@ -92,7 +92,7 @@ class AppDrawer extends StatelessWidget {
                   } else if (state is FailedLoadingProfileState) {
                     return Container(
                       height: 298,
-                      color: Colors.red,
+                      color: AppColors.primaryBlue,
                       child:  Center(
                         child: Text(state.message),
                       ),

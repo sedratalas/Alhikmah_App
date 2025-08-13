@@ -61,6 +61,7 @@ class LoginScreen extends StatelessWidget {
                       bottom: screenHeight * (33 / 840),
                     ),
                     child: Column(
+                      spacing: 20,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(

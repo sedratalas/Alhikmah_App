@@ -9,7 +9,9 @@ import '../../core/utils/color_manager.dart';
 import '../hadeth_recitation/bloc/hadith_bloc.dart';
 //import '../hadeth_recitation/hadeth_recitation_screen.dart';
 //import '../hadeth_recitation/hadith_recitation.dart';
-import '../hadeth_recitation/recitation_and_listen.dart';
+//import '../hadeth_recitation/recitation_and_listen.dart';
+//import '../hadeth_recitation/repository_hadith_screen.dart';
+import '../hadeth_recitation/result_hadith_recititon.dart';
 import '../widget/app_drawer.dart';
 import '../widget/bloc/profile_bloc.dart';
 
@@ -69,7 +71,7 @@ class AhadithScreen extends StatelessWidget {
                                 book: book,
                                 initialIndex: index,
                               )..add(FetchHadithByIdEvent(index)),
-                              child: HadethRecitationScreen(),
+                              child: HadethRecitationScreen(hadith: book.hadiths[index]),
                             ),
                           ));
       

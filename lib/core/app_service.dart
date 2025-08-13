@@ -26,7 +26,7 @@
 //     await bookRepository.init();
 //   }
 // }
-// في ملف: lib/core/app_service.dart
+import 'package:alhekmah_app/service/assembly_ai_service.dart';
 import 'package:alhekmah_app/service/auth_service.dart';
 import 'package:alhekmah_app/repository/book_repository.dart';
 import 'package:alhekmah_app/service/book_service.dart';
@@ -35,7 +35,9 @@ import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../repository/audio_repository.dart';
 import '../repository/profile_repository.dart';
+import '../service/audio_service.dart';
 import '../service/profile_service.dart';
 
 class AppServices {
@@ -44,21 +46,30 @@ class AppServices {
   static late final BookRepository bookRepository;
   static late final ProfileService profileService;
   static late final ProfileRepository profileRepository;
+  static late final AssemblyAiService assemblyAiService;
+  static late final HadithUploadService hadithUploadService;
+  static late final HadithRepository hadithRepository;
   static late final DioClient dioClient;
 
   static Future<void> init() async {
-   
+    await Hive.initFlutter();
     await Hive.openBox('tokenBox');
     final tokenBox = Hive.box('tokenBox');
 
     dioClient = DioClient(tokenBox);
 
-    bookService = BookService(dio: dioClient.dio);
     authenticationService = dioClient.authService;
+    bookService = BookService(dio: dioClient.dio);
     profileService = ProfileService(dio: dioClient.dio);
+    hadithUploadService = HadithUploadService(dio: dioClient.dio);
+
+    assemblyAiService = AssemblyAiService(dio: Dio());
 
     bookRepository = BookRepository(bookService);
     profileRepository = ProfileRepository(profileService: profileService);
+
+    hadithRepository = HadithRepository(uploadService: hadithUploadService, assemblyAiService: assemblyAiService);
+
     await bookRepository.init();
   }
 }
