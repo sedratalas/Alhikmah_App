@@ -5,9 +5,10 @@ import 'package:dio/dio.dart';
 import '../model/standard_remote_book.dart';
 
 class BookService{
-  Dio dio = Dio();
+  final Dio dio;
+  BookService({required this.dio});
   late Response response;
-  String baseUrl = 'https://alhekmah-server-side.onrender.com/books/';
+  String baseUrl = "books/";
 
   Future<RemotBook?> getOneBook (String bookId)async{
     try{
@@ -33,7 +34,7 @@ class BookService{
 
 Future<List<Hadith>?>getBookHadiths(String bookId)async{
     try{
-      response = await dio.get(bookId+"/hadiths");
+      response = await dio.get(baseUrl+bookId+"/hadiths");
       List<Hadith> hadiths = [];
       for(int i=0; i< response.data.length ;i++){
         hadiths.add(Hadith.fromJson(response.data[i]));

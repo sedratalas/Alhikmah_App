@@ -10,19 +10,27 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationService authenticationService;
+
   LoginBloc({required this.authenticationService}) : super(LoginInitial()) {
     on<TryLogin>((event, emit) async {
       emit(LoginLoading());
       try {
-        final token = await authenticationService.login(
+        final TokenResponseModel tokenResponse = await authenticationService.login(
           user: LoginRequestModel(
             username: event.username,
             password: event.password,
           ),
         );
-        final box = await Hive.openBox('tokenBox');
-        await box.put('tokens', token);
+
+
+        final box = Hive.box('tokenBox');
+
+
+        await box.put('accessToken', tokenResponse.accessToken);
+        await box.put('refreshToken', tokenResponse.refreshToken);
+
         emit(LoginSuccess());
+
       } catch (e) {
         emit(LoginFailed(message: "$e"));
       }

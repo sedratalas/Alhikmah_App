@@ -34,7 +34,7 @@ class SignupStep1Screen extends StatelessWidget {
               ),
               Padding(
               padding:  EdgeInsets.only(left: screenWidth*(75/390),right: screenWidth*(75/390), bottom: screenHeight*(62/840),),
-                child: Image.asset(AssetManager.logIn),
+                child: Image.asset("assets/icons/781a79800560828fb4a659849ea917ba5e6f13ac.gif"),
               ),
               Padding(
                 padding:  EdgeInsets.only(left: screenWidth*(19/390),right: screenWidth*(19/390), bottom: screenHeight*(27/840),),

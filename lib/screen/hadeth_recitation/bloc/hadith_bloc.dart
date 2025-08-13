@@ -33,9 +33,9 @@ class HadithBloc extends Bloc<HadithEvent, HadithState> {
           _currentIndex++;
           emit(
               HadithLoadedState(
-            currentHadith: book.hadiths[_currentIndex],
             currentHadithIndex: _currentIndex,
-            totalHadiths: book.hadiths.length,
+                currentHadith: book.hadiths[_currentIndex],
+                totalHadiths: book.hadiths.length,
           ));
         }
       }

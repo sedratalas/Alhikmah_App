@@ -127,7 +127,11 @@ class LoginScreen extends StatelessWidget {
                             backgroundColor: Colors.green,
                           ),
                         );
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AllBooksScreen()));
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => AllBooksScreen()),
+                              (Route<dynamic> route) => false,
+                        );
                       } else if (state is LoginFailed) {
                         print(state.message);
                         ScaffoldMessenger.of(context).showSnackBar(

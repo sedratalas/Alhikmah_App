@@ -5,9 +5,10 @@ import '../model/signup_model.dart';
 import '../model/token_model.dart';
 
 class AuthenticationService {
-  Dio dio = Dio();
+  final Dio dio;
+  AuthenticationService({required this.dio});
   late Response response;
-  String baseUrl = 'https://alhekmah-server-side.onrender.com/auth/';
+  String baseUrl = 'auth/';
 
   Future<void> register({required SignupModel user}) async {
     try {

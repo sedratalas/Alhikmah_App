@@ -2,6 +2,9 @@ import 'package:alhekmah_app/core/utils/asset_manager.dart';
 import 'package:alhekmah_app/core/utils/color_manager.dart';
 import 'package:alhekmah_app/screen/widget/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../widget/bloc/profile_bloc.dart';
 
 
 
@@ -36,6 +39,7 @@ class _BouquetScreenState extends State<BouquetScreen> {
             builder: (context) {
               return GestureDetector(
                 onTap: (){
+                  BlocProvider.of<ProfileBloc>(context).add(FetchUserProfile());
                   Scaffold.of(context).openDrawer();
                 },
                 child: Padding(
