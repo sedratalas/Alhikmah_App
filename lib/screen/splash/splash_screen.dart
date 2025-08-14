@@ -1,136 +1,72 @@
+import 'package:alhekmah_app/screen/sign_up/signup_step1_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
-  late AnimationController _lanternScaleController;
-  late Animation<double> _lanternScale;
-
-  late AnimationController _lanternMoveController;
-  late Animation<Offset> _lanternOffset;
-
-  late AnimationController _textFadeController;
-  late Animation<double> _textOpacity;
-
-  bool showFirstGradient = true;
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _widthAnimation;
+  late Animation<double> _heightAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _lanternScaleController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
-    _lanternScale = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.4), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 1.4, end: 1.0), weight: 50),
-    ]).animate(CurvedAnimation(
-      parent: _lanternScaleController,
-      curve: Curves.easeInOut,
-    ));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    );
 
-    _lanternMoveController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
-    _lanternOffset = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(-0.3, 0),
-    ).animate(CurvedAnimation(
-      parent: _lanternMoveController,
-      curve: Curves.easeInOut,
-    ));
+    _widthAnimation = TweenSequence([
+      TweenSequenceItem(tween: ConstantTween<double>(50), weight: 30),
+      TweenSequenceItem(tween: Tween<double>(begin: 50, end: 71), weight: 35),
+      TweenSequenceItem(tween: Tween<double>(begin: 71, end: 50), weight: 35),
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _textFadeController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
-    _textOpacity = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
-      parent: _textFadeController,
-      curve: Curves.easeIn,
-    ));
+    _heightAnimation = TweenSequence([
+      TweenSequenceItem(tween: ConstantTween<double>(46), weight: 30),
+      TweenSequenceItem(tween: Tween<double>(begin: 46, end: 74), weight: 35),
+      TweenSequenceItem(tween: Tween<double>(begin: 74, end: 46), weight: 35),
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _startAnimation();
-  }
+    _controller.forward();
 
-  Future<void> _startAnimation() async {
-    // المرحلة الأولى: عرض الخلفية الأولى لمدة ثانية
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() => showFirstGradient = false);
-
-    // المرحلة الثانية: تكبير/تصغير الفانوس
-    await _lanternScaleController.forward();
-
-    // المرحلة الثالثة: تحريك الفانوس وظهور النص معاً + تغيير الخلفية
-    await Future.wait([
-      _lanternMoveController.forward(),
-      _textFadeController.forward(),
-    ]);
-    setState(() => showFirstGradient = true);
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SignupStep1Screen()));
+      }
+    });
   }
 
   @override
   void dispose() {
-    _lanternScaleController.dispose();
-    _lanternMoveController.dispose();
-    _textFadeController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final gradient1 = const LinearGradient(
-      colors: [
-        Color(0xFF088395),
-        Color(0xFF30A5B0),
-        Color(0xffD7FFBB),
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    );
-    final gradient2 = const LinearGradient(
-      colors: [Color(0xFF003844), Color(0xFF003844)],
-    );
-
     return Scaffold(
-      body: AnimatedContainer(
-        duration: const Duration(milliseconds: 800),
-        decoration: BoxDecoration(
-          gradient: showFirstGradient ? gradient1 : gradient2,
-        ),
-        child: Center(
-          child: SlideTransition(
-            position: _lanternOffset,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ScaleTransition(
-                  scale: _lanternScale,
-                  child: Image.asset(
-                    "assets/images/lantern 1.png",
-                    width: 80,
-                    height: 80,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                FadeTransition(
-                  opacity: _textOpacity,
-                  child: Center(
-                    child: Text(
-                      "الحكمة",
-                      style: const TextStyle(
-                        fontFamily: "Cairo",
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+      backgroundColor: const Color(0xFF003C46),
+      body: Center(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return SizedBox(
+              width: _widthAnimation.value,
+              height: _heightAnimation.value,
+              child: Image.asset(
+                "assets/images/lantern 1.png",
+                fit: BoxFit.contain,
+              ),
+            );
+          },
         ),
       ),
     );

@@ -38,6 +38,7 @@ import 'package:hive_flutter/adapters.dart';
 import '../repository/audio_repository.dart';
 import '../repository/profile_repository.dart';
 import '../service/audio_service.dart';
+import '../service/payment_service.dart';
 import '../service/profile_service.dart';
 
 class AppServices {
@@ -49,6 +50,7 @@ class AppServices {
   static late final AssemblyAiService assemblyAiService;
   static late final HadithUploadService hadithUploadService;
   static late final HadithRepository hadithRepository;
+  static late final PaymentService paymentService;
   static late final DioClient dioClient;
 
   static Future<void> init() async {
@@ -62,6 +64,7 @@ class AppServices {
     bookService = BookService(dio: dioClient.dio);
     profileService = ProfileService(dio: dioClient.dio);
     hadithUploadService = HadithUploadService(dio: dioClient.dio);
+    paymentService = PaymentService(dio: dioClient.dio);
 
     assemblyAiService = AssemblyAiService(dio: Dio());
 

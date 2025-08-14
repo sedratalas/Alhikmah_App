@@ -4,6 +4,7 @@ import 'package:alhekmah_app/screen/widget/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'payment_screen.dart';
 import '../widget/bloc/profile_bloc.dart';
 
 
@@ -103,30 +104,38 @@ class _BouquetScreenState extends State<BouquetScreen> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding:  EdgeInsets.only(right: screenWidth*(20/390),top: screenHeight*(24/840),),
-                              child: Container(
-                                width: screenWidth * (160 / 390),
-                                height: screenHeight * (40 / 844),
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Color(0xFF34B2C4),
-                                      Color(0xFF088A9D),
-                                    ],
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const PaymentScreen()),
+                                );
+                              },
+                              child: Padding(
+                                padding:  EdgeInsets.only(right: screenWidth*(20/390),top: screenHeight*(24/840),),
+                                child: Container(
+                                  width: screenWidth * (160 / 390),
+                                  height: screenHeight * (40 / 844),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xFF34B2C4),
+                                        Color(0xFF088A9D),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                  "تفعيل الباقة",
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: "Cairo",
-                                      color: Colors.white,
+                                  child: Center(
+                                    child: Text(
+                                    "تفعيل الباقة",
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: "Cairo",
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),

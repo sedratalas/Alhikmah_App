@@ -10,6 +10,7 @@ class AssemblyAiService {
 
   Future<Map<String, dynamic>> sendToAssemblyAI(File audioFile, String targetHadithMatn) async {
     try {
+      print("hi from assemble");
       final uploadResponse = await _dio.post(
         'https://api.assemblyai.com/v2/upload',
         data: audioFile.openRead(),
@@ -54,6 +55,7 @@ class AssemblyAiService {
             'highlightedUserTranscription': highlightedTexts['transcription'],
             'status': 'completed',
           };
+          print("hi from assemble");
         } else if (status == 'error') {
           return {
             'error': 'حدث خطأ أثناء التفريغ الصوتي.',

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,6 +43,7 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
   bool _isSending = false;
   List<TextSpan> _highlightedOriginal = [];
   List<TextSpan> _highlightedUserTranscription = [];
+  List<String> _userTranscriptionWords = [];
   int _elapsedTimeInSeconds = 0;
   Timer? _timer;
 
@@ -543,18 +545,19 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 5),
-                                  RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 18,
-                                        fontFamily: "Aladin",
-                                        color: AppColors.black,
-                                      ),
-                                      children: _highlightedUserTranscription,
-                                    ),
-                                  ),
+                                  // RichText(
+                                  //   textAlign: TextAlign.center,
+                                  //   text: TextSpan(
+                                  //     style: const TextStyle(
+                                  //       fontWeight: FontWeight.w400,
+                                  //       fontSize: 18,
+                                  //       fontFamily: "Aladin",
+                                  //       color: AppColors.black,
+                                  //     ),
+                                  //     children: _highlightedUserTranscription,
+                                  //   ),
+                                  // ),
+                                  _buildCorrectableTranscription(),
                                 ],
                               )
                                   : Text(
@@ -856,4 +859,149 @@ class _HadethRecitationScreenState extends State<HadethRecitationScreen> {
       },
     );
   }
+
+  Widget _buildCorrectableTranscription() {
+    List<TextSpan> interactiveSpans = [];
+    for (int i = 0; i < _highlightedUserTranscription.length; i++) {
+      final span = _highlightedUserTranscription[i];
+      final isWrong = span.style?.color == Colors.red;
+
+      interactiveSpans.add(
+        TextSpan(
+          text: span.text,
+          style: span.style,
+          recognizer: isWrong
+              ? (TapGestureRecognizer()
+            ..onTap = () {
+              final correctedText = _highlightedUserTranscription[i].text!.trim();
+              _showCorrectionDialog(i, correctedText);
+            })
+              : null,
+        ),
+      );
+    }
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: const TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 18,
+          fontFamily: "Aladin",
+          color: AppColors.black,
+        ),
+        children: interactiveSpans,
+      ),
+    );
+  }
+
+  Future<void> _showCorrectionDialog(int wordIndex, String originalWord) async {
+    String correctedWord = originalWord;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            title: const Text('تصحيح الكلمة'),
+            content: TextField(
+              autofocus: true,
+              onChanged: (value) {
+                correctedWord = value;
+              },
+              controller: TextEditingController(text: originalWord),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('إلغاء'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _updateTranscriptionAndRecalculate(wordIndex, correctedWord);
+                },
+                child: const Text('تأكيد'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _updateTranscriptionAndRecalculate(int wordIndex, String correctedWord) {
+    setState(() {
+
+      _highlightedUserTranscription[wordIndex] = TextSpan(
+        text: '$correctedWord ',
+        style: const TextStyle(
+          color: AppColors.primaryBlue,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+
+
+      final originalMatn = widget.hadith.content ?? widget.hadith.matn ?? "";
+      final originalWords = originalMatn.split(' ');
+
+
+      List<String> correctedWords = [];
+      for (var span in _highlightedUserTranscription) {
+
+        if (span.text != null) {
+          correctedWords.add(span.text!.trim());
+        }
+      }
+
+      correctedWords.removeWhere((word) => word.isEmpty);
+      int matchingWords = 0;
+      for (int i = 0; i < originalWords.length && i < correctedWords.length; i++) {
+        if (originalWords[i].trim() == correctedWords[i].trim()) {
+          matchingWords++;
+        }
+      }
+      double newScore = 0;
+      if (originalWords.isNotEmpty) {
+        newScore = (matchingWords / originalWords.length) * 100;
+      }
+      _matchScore = newScore.toStringAsFixed(2);
+      print("match score");
+      print(_matchScore);
+      print(originalMatn);
+      print(originalWords);
+      print(correctedWord);
+
+    });
+  }
+
 }
+
+
+// void _updateTranscriptionAndRecalculate(int wordIndex, String correctedWord) {
+//   setState(() {
+//     _highlightedUserTranscription[wordIndex] = TextSpan(
+//       text: '$correctedWord ',
+//       style: const TextStyle(
+//         color: AppColors.primaryBlue,
+//         fontWeight: FontWeight.w700,
+//       ),
+//     );
+//     String correctedTranscription = _highlightedUserTranscription
+//         .map((span) => span.text)
+//         .join()
+//         .trim();
+//     final originalMatn = widget.hadith.matn ?? "";
+//     final originalWords = originalMatn.split(' ');
+//     final correctedWords = correctedTranscription.split(' ');
+//     int matchingWords = 0;
+//     for (int i = 0; i < originalWords.length && i < correctedWords.length; i++) {
+//       if (originalWords[i].trim() == correctedWords[i].trim()) {
+//         matchingWords++;
+//       }
+//     }
+//     double newScore = (matchingWords / originalWords.length) * 100;
+//     _matchScore = newScore.toStringAsFixed(2);
+//   });
+// }

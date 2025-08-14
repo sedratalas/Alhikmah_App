@@ -11,7 +11,8 @@ import '../hadeth_recitation/bloc/hadith_bloc.dart';
 //import '../hadeth_recitation/hadith_recitation.dart';
 //import '../hadeth_recitation/recitation_and_listen.dart';
 //import '../hadeth_recitation/repository_hadith_screen.dart';
-import '../hadeth_recitation/result_hadith_recititon.dart';
+//import '../hadeth_recitation/result_hadith_recititon.dart';
+import 'package:alhekmah_app/screen/hadeth_recitation/tooltip_hadith_screen.dart';
 import '../widget/app_drawer.dart';
 import '../widget/bloc/profile_bloc.dart';
 
@@ -32,7 +33,7 @@ class AhadithScreen extends StatelessWidget {
           backgroundColor: AppColors.primaryBlue,
           title: Align(
             alignment: Alignment.centerRight,
-            child: Text("الأربعون النووية",
+            child: Text(book.title,
             ),
           ),
           titleTextStyle: TextStyle(
